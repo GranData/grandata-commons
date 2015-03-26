@@ -27,11 +27,11 @@ trait GlobImpl {
       if (patterns.isEmpty) Iterator.empty
       else {
         val (noMagic, magic) = patterns.span(withoutMagic)
-        val newBase = basedir + noMagic.mkString("/")
+        val newBase = fileSystem.getPath(basedir, noMagic.mkString("/"))
 
 //        println(s"basedir: $basedir, newBase: $newBase, magic: ${magic.mkString(" / ")}")
 
-        Try(Files.newDirectoryStream(fileSystem.getPath(newBase), magic.head))
+        Try(Files.newDirectoryStream(newBase, magic.head))
           .map(stream =>
           try {
             stream.map { foundPath =>
