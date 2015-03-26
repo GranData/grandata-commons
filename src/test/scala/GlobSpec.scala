@@ -28,7 +28,12 @@ class GlobSpec extends Specification with BeforeAll {
   Files.newDirectoryStream(fs.getPath("/")).iterator.toIterator.foreach(println)
 
   def beforeAll: Unit = {
-    Files.createDirectory(fs.getPath("/foo"))
+    Files.createDirectory(fs.getPath("/one"))
+    Files.createFile(fs.getPath("/one/one"))
+    Files.createFile(fs.getPath("/one/two"))
+    Files.createFile(fs.getPath("/one/three.gz"))
+    Files.createDirectory(fs.getPath("/one/dir_one"))
+    Files.createFile(fs.getPath("/one/dir_one/one.gz"))
   }
 
   val glob = new Glob(fs)
@@ -37,7 +42,27 @@ class GlobSpec extends Specification with BeforeAll {
 
     "show foo in /*" in {
 
-      glob.glob("/*").toList mustEqual List("/foo")
+      glob.glob("/*").toList mustEqual List("/one")
+
+    }
+    "show foo in /*/*" in {
+
+      glob.glob("/*/*").toSet mustEqual Set("/one/one", "/one/two", "/one/three.gz", "/one/dir_one")
+
+    }
+    "show foo in /*/*.gz" in {
+
+      glob.glob("/*/*.gz").toSet mustEqual Set("/one/three.gz")
+
+    }
+    "show foo in /*/*/*" in {
+
+      glob.glob("/*/*/*").toSet mustEqual Set("/one/dir_one/one.gz")
+
+    }
+    "show foo in /*/dir_one/*.gz" in {
+
+      glob.glob("/*/dir_one/*.gz").toSet mustEqual Set("/one/dir_one/one.gz")
 
     }
 
