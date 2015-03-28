@@ -25,47 +25,55 @@ class GlobSpec extends Specification with BeforeAll {
       .setSupportedFeatures(LINKS, SYMBOLIC_LINKS, SECURE_DIRECTORY_STREAM, FILE_CHANNEL)
       .build())
 
-  Files.newDirectoryStream(fs.getPath("/")).iterator.toIterator.foreach(println)
+//  Files.newDirectoryStream(fs.getPath("/")).iterator.toIterator.foreach(println)
 
   def beforeAll: Unit = {
     Files.createDirectory(fs.getPath("/one"))
+    Files.createDirectory(fs.getPath("/two"))
     Files.createFile(fs.getPath("/one/one"))
     Files.createFile(fs.getPath("/one/two"))
     Files.createFile(fs.getPath("/one/three.gz"))
     Files.createDirectory(fs.getPath("/one/dir_one"))
+    Files.createDirectory(fs.getPath("/one/dir_two"))
     Files.createFile(fs.getPath("/one/dir_one/one.gz"))
+    Files.createFile(fs.getPath("/one/dir_one/one1.gz"))
+    Files.createFile(fs.getPath("/one/dir_two/one2.gz"))
   }
 
   val glob = new Glob(fs)
 
   "Glob" should {
 
-    "show foo in /*" in {
+    "show /*" in {
 
-      glob.glob("/*").toList mustEqual List("/one")
-
-    }
-    "show foo in /*/*" in {
-
-      glob.glob("/*/*").toSet mustEqual Set("/one/one", "/one/two", "/one/three.gz", "/one/dir_one")
+      glob.glob("/*").toList mustEqual List("/one", "/two")
 
     }
-    "show foo in /*/*.gz" in {
+    "show /*/*" in {
+
+      glob.glob("/*/*").toSet mustEqual Set("/one/one", "/one/two", "/one/three.gz", "/one/dir_one", "/one/dir_two")
+
+    }
+    "show /*/*.gz" in {
 
       glob.glob("/*/*.gz").toSet mustEqual Set("/one/three.gz")
 
     }
-    "show foo in /*/*/*" in {
+    "show /*/*/*" in {
 
-      glob.glob("/*/*/*").toSet mustEqual Set("/one/dir_one/one.gz")
-
-    }
-    "show foo in /*/dir_one/*.gz" in {
-
-      glob.glob("/*/dir_one/*.gz").toSet mustEqual Set("/one/dir_one/one.gz")
+      glob.glob("/*/*/*").toSet mustEqual Set("/one/dir_one/one.gz", "/one/dir_one/one1.gz", "/one/dir_two/one2.gz")
 
     }
+    "show /*/dir_one/*.gz" in {
 
+      glob.glob("/*/dir_one/*.gz").toSet mustEqual Set("/one/dir_one/one.gz", "/one/dir_one/one1.gz")
+
+    }
+    "show /*/dir_*/one[1-9].gz" in {
+
+      glob.glob("/*/dir_*/one[1-9].gz").toSet mustEqual Set("/one/dir_two/one2.gz", "/one/dir_one/one1.gz")
+
+    }
   }
 
 
