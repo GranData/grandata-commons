@@ -61,7 +61,7 @@ class GlobSpec extends Specification with BeforeAll {
     }
     "show /*/*/*" in {
 
-      glob.glob("/*/*/*").toSet mustEqual Set("/one/dir_one/one.gz", "/one/dir_one/one1.gz", "/one/dir_two/one2.gz")
+      glob.glob("/*/{dir_one,dir_two}/*").toSet mustEqual Set("/one/dir_one/one.gz", "/one/dir_one/one1.gz", "/one/dir_two/one2.gz")
 
     }
     "show /*/dir_one/*.gz" in {

@@ -19,7 +19,7 @@ trait GlobImpl {
 
     import collection.JavaConversions._
 
-    private lazy val magicRegex = """[*?\[]""".r
+    private lazy val magicRegex = """[*?\[\{]""".r
     private def withoutMagic(pattern: String): Boolean = magicRegex.findFirstIn(pattern).isEmpty
 
     private def iglob(basedir: String, patterns: Array[String]): Iterator[String] = {
