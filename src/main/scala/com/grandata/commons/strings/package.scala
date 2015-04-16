@@ -1,3 +1,4 @@
+package com.grandata.commons
 
 import scala.reflect.ClassTag
 
