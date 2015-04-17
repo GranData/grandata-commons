@@ -13,9 +13,9 @@ class StringsSpecs extends Specification with BeforeAll {
   }
 
 
-  import com.grandata.commons.strings._
   "Strings" should {
 
+    import com.grandata.commons.strings._
     """split "\t\t\t"  """ in {
 
       "\t\t\t".splitFields('\t') mustEqual Array("", "", "", "")
