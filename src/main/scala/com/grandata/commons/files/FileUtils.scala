@@ -4,7 +4,7 @@ import scala.io.Source._
 import java.io._
 import java.util.zip.{GZIPOutputStream, GZIPInputStream}
 
-
+import org.apache.commons.io.{ FileUtils => ApacheFileUtils }
 /**
  * @author esteban
  */
@@ -14,12 +14,13 @@ object FileUtils {
     def buildStream(f: File): OutputStream
   }
 
+
   object IdentityStreamConverter extends StreamConverter {
-    def buildStream(f: File): OutputStream = new FileOutputStream(f)
+    def buildStream(f: File): OutputStream = ApacheFileUtils.openOutputStream(f)
   }
 
   object GzStreamConverter extends StreamConverter {
-    def buildStream(f: File): OutputStream = new GZIPOutputStream(new FileOutputStream(f))
+    def buildStream(f: File): OutputStream = new GZIPOutputStream(ApacheFileUtils.openOutputStream(f))
   }
 
   def printToFile(f: String, d: String): Unit = printToFile(new File(f), d)
