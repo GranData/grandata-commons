@@ -43,6 +43,8 @@ object FileUtils {
   }
 
   def fileContent(f: String) = fromFile(f).mkString
+  
+  def fileLines(f: String) = fromFile(f).getLines()
 
   def gzippedFileContent(f: String) =
     fromInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(f)))).mkString
