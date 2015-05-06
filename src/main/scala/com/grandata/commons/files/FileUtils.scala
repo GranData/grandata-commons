@@ -25,6 +25,9 @@ object FileUtils {
 
   def printToFile(f: String, d: String): Unit = printToFile(new File(f), d)
   def printToFile(f: File, d: String): Unit = getFiltePrinter(f) { p=> p.println(d) }
+  
+  def printToFile(f: String, d: Iterable[String]): Unit = printToFile(new File(f), d)
+  def printToFile(f: File, d: Iterable[String]): Unit = getFiltePrinter(f) { p=> d.foreach(p.println(_)) }
 
   def getFiltePrinter(f: String)(op: java.io.PrintWriter => Unit): Unit =
     getFiltePrinter(new File(f)) _
@@ -40,6 +43,8 @@ object FileUtils {
   }
 
   def fileContent(f: String) = fromFile(f).mkString
+  
+  def fileLines(f: String) = fromFile(f).getLines()
 
   def gzippedFileContent(f: String) =
     fromInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(f)))).mkString
