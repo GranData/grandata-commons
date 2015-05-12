@@ -9,10 +9,10 @@ trait Config {
 
   private val homeDir = System.getProperty("user.home")
 
-  private val devApplicationConf = ConfigFactory.load("application")
-  private val appConfigFile =
+  private lazy val devApplicationConf = ConfigFactory.load("application")
+  private lazy val appConfigFile =
     devApplicationConf.getString(s"${applicationName}.application.app-config-path")
 
-  val userApp = ConfigFactory.parseFile(new File(homeDir + "/" + appConfigFile))
-  val application = userApp.withFallback(devApplicationConf)
+  lazy val userApp = ConfigFactory.parseFile(new File(homeDir + "/" + appConfigFile))
+  lazy val application = userApp.withFallback(devApplicationConf)
 }
