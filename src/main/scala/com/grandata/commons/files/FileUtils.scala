@@ -23,6 +23,7 @@ object FileUtils {
     def buildStream(f: File): OutputStream = new GZIPOutputStream(ApacheFileUtils.openOutputStream(f))
   }
 
+  def write(filePath: String, content: String): Unit = printToFile(new File(filePath), content)
   def printToFile(f: String, d: String): Unit = printToFile(new File(f), d)
   def printToFile(f: File, d: String): Unit = getFiltePrinter(f) { p=> p.println(d) }
   
