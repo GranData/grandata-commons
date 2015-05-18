@@ -3,12 +3,14 @@ package com.grandata.commons.files
 import scala.io.Source._
 import java.io._
 import java.util.zip.{GZIPOutputStream, GZIPInputStream}
-
 import org.apache.commons.io.{ FileUtils => ApacheFileUtils }
+import scala.io.Codec
 /**
  * @author esteban
  */
 object FileUtils {
+  
+  implicit val codec: Codec = Codec.UTF8
 
   trait StreamConverter {
     def buildStream(f: File): OutputStream
