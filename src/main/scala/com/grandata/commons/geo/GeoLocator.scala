@@ -15,10 +15,30 @@ import io.jeo.geom.Geom
 import com.grandata.commons.files.FileUtils._
 import io.jeo.vector.Schema
 
-/**
- * @author esteban
- *
- */
+/** Provides geo-location functionality for several polygon lists. Each polygon list 
+  * is loaded from a geojson file. It creates an spatial index for each geojson file with all the polygons
+  * stored in that file
+  * 
+  * @example {{{
+  * //create a GeoLocator instance for a state and a city polygon list
+  * val locator = new GeoLocator(List("/geo/states.geojson", "/geo/cities.geojson"))
+  * //build the states and cities R-Trees
+  * locator.generateTrees
+  * //try to locate the point in both R-Trees
+  * val r = locator.locate(new Point(15.74,103.5)) 
+  * if(r(0).isDefined) {
+  *   println("could locate point in state " + r(0).get.get("id"))
+  * }                                            
+  * if(r(1).isDefined) {
+  *   println("could locate point in city " + r(1).get.get("id"))
+  * }
+  * }}}
+  * 
+  * @constructor creates a GeoLocator instance using a list of geojson files
+  *  
+  * @see [[http://geojson.org/]] for more information on geojson format
+  * @author Esteban Donato
+  */
 class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
   
   @transient private var featuresInfo: List[(RTree, Array[Feature])] = _
@@ -29,6 +49,9 @@ class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
     generateTrees
   }
   
+  /**
+   * generates an R-Tree for each geojson file provided to this GeoLocator
+   */
   def generateTrees = {
     val jsonFiles = geoJsonPaths
     val featuresList = jsonFiles.map { jsonPath =>
@@ -58,6 +81,11 @@ class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
     new Rectangle(p.long.toFloat, p.lat.toFloat, p.long.toFloat, p.lat.toFloat)
   }
   
+  /** tries to locate the given point into several polygons lists
+    * 
+    * @param point the point to be located
+    * @return for each polygon list an Option[Feature] indicating whether the point could be located into some polygon
+    */
   def locate(point: Point): List[Option[Feature]] = {
     if (point.lat == 0 && point.long == 0) {
       List.fill(featuresInfo.size)(None)
@@ -82,4 +110,7 @@ class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
     }
   }
 }
+/**
+  * Geo point defined as a latitude/longitude pair
+  */
 class Point(val lat: Double, val long: Double)
