@@ -1,17 +1,16 @@
 /**
  * Created by gustavo on 26/03/15.
  */
+package com.grandata.commons.files
 
 import java.nio.file.{FileSystems, FileSystem, Files}
-
-import com.grandata.commons.files.{GlobImpl, FileSystemComponent}
 import org.specs2.mutable._
 import org.specs2.specification.{BeforeAll, BeforeAfterAll}
 
 import com.google.common.jimfs.{PathType, Configuration, Jimfs}
 import com.google.common.jimfs.Feature._
 
-class Glob(fs: FileSystem) extends GlobImpl with FileSystemComponent {
+class GlobTest(fs: FileSystem) extends GlobImpl with FileSystemComponent {
   def fileSystem: FileSystem = fs
 }
 class GlobSpec extends Specification with BeforeAll {
@@ -40,7 +39,7 @@ class GlobSpec extends Specification with BeforeAll {
     Files.createFile(fs.getPath("/one/dir_two/one2.gz"))
   }
 
-  val glob = new Glob(fs)
+  val glob = new GlobTest(fs)
 
   "Glob" should {
 
