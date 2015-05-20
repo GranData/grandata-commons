@@ -77,7 +77,7 @@ class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
     tree
   }
   
-  private def toRectangle(p: Point) = {
+  private def toRectangle(p: GeoPoint) = {
     new Rectangle(p.long.toFloat, p.lat.toFloat, p.long.toFloat, p.lat.toFloat)
   }
   
@@ -86,31 +86,27 @@ class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
     * @param point the point to be located
     * @return for each polygon list an Option[Feature] indicating whether the point could be located into some polygon
     */
-  def locate(point: Point): List[Option[Feature]] = {
-    if (point.lat == 0 && point.long == 0) {
-      List.fill(featuresInfo.size)(None)
-    } else {
-      featuresInfo.map { case (tree, features) =>
-        var result: Option[Feature] = None // This is really ugly.
-        tree.intersects(toRectangle(point), new TIntProcedure() {
-          def execute(i: Int) = {
-            val feature = features(i)
-            //TODO geometry.buffer(0.0) is a workaround to avoid a "Self-intersection at or near point" exception. 
-            //The exception is avoided now but performance got worse
-            if (feature.geometry.buffer(0.0).contains(Geom.point(point.long, point.lat))) {
-              result = Some(feature)
-              false
-            } else {
-              true
-            }
+  def locate(point: GeoPoint): List[Option[Feature]] = {
+    featuresInfo.map { case (tree, features) =>
+      var result: Option[Feature] = None // This is really ugly.
+      tree.intersects(toRectangle(point), new TIntProcedure() {
+        def execute(i: Int) = {
+          val feature = features(i)
+          //TODO geometry.buffer(0.0) is a workaround to avoid a "Self-intersection at or near point" exception. 
+          //The exception is avoided now but performance got worse
+          if (feature.geometry.buffer(0.0).contains(Geom.point(point.long, point.lat))) {
+            result = Some(feature)
+            false
+          } else {
+            true
           }
-        })
-        result
-      }
+        }
+      })
+      result
     }
   }
 }
 /**
   * Geo point defined as a latitude/longitude pair
   */
-class Point(val lat: Double, val long: Double)
+class GeoPoint(val lat: Double, val long: Double)
