@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.grandata.commons.geo
 
 import org.specs2.mutable.Specification
@@ -8,11 +5,6 @@ import org.specs2.specification.BeforeAfterAll
 import com.grandata.commons.files.FileUtils
 import java.io.File
 
-
-/**
- * @author esteban
- *
- */
 class GeoLocatorSpec extends Specification with BeforeAfterAll {
   
   var locator: GeoLocator = _
@@ -21,18 +13,16 @@ class GeoLocatorSpec extends Specification with BeforeAfterAll {
   
   "GeoLocator" should {
     "return the geo located points" in {
-      val result = locator.locate(new Point(20,-101))
+      val result = locator.locate(new GeoPoint(20,-101))
       result must be size(2)
       result(0) must beSome
       result(0).get.get("id") === 4
       result(1) must beSome
       result(1).get.get("id") === 40
     }
-  }
   
-  "GeoLocator" should {
     "return none for the points not located" in {
-      val result = locator.locate(new Point(15.74,103.5))
+      val result = locator.locate(new GeoPoint(15.74,103.5))
       result must be size(2)
       result(0) must beSome
       result(0).get.get("id") === 5

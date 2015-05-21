@@ -1,4 +1,4 @@
-import java.nio.file.Files
+package com.grandata.commons.strings
 
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAll

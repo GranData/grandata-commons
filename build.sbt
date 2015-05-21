@@ -10,6 +10,7 @@ libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "2.4",
   "io.jeo" % "jeo" % "0.6",
   "net.sourceforge.jsi" % "jsi" % "1.0.0",
+  "com.typesafe" % "config" % "1.2.1",
   "com.google.jimfs" % "jimfs" % "1.0" % "test",
   "org.specs2" %% "specs2-core" % "3.1.1" % "test")
 
