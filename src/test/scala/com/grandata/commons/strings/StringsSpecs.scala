@@ -21,5 +21,10 @@ class StringsSpecs extends Specification with BeforeAll {
       "\t\t\t".splitFields('\t') mustEqual Array("", "", "", "")
 
     }
+
+    "Ocurrences is OK" in {
+      "hola nada nada x y z hola manhola".occurrences("hola") must equalTo(3)
+      "ola nada nada x y z ola".occurrences("hola") must equalTo(0)
+    }
   }
 }

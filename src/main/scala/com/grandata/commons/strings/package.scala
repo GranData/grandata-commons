@@ -8,4 +8,7 @@ package object strings {
     def splitFields(char: Char) = s.split(s"\\$char", -1)
   }
 
+  implicit class RichString[T](str: String) {
+    def occurrences(substr: String) = substr.r.findAllMatchIn(str).length
+  }
 }
