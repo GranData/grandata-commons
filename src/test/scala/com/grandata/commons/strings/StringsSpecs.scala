@@ -58,6 +58,13 @@ class StringsSpecs extends Specification {
       "1".toStringOption must beEqualTo(Some("1"))
       "".toStringOption must beEqualTo(None)
     }
+    
+    "Convert a String to Byte Option" in {
+      "1".toByteOption must beEqualTo(Some(1.toByte))
+      "-1".toByteOption must beEqualTo(Some(-1.toByte))
+      "300".toByteOption must beEqualTo(None)
+      "".toByteOption must beEqualTo(None)
+    }
 
     "Convert a String to Date" in {
       val date = new GregorianCalendar(2015, 0, 24).getTime

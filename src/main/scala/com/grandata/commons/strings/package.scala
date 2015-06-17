@@ -21,6 +21,8 @@ package object strings {
     
     def toFloatOption: Option[Float] = Try(str.toFloat).toOption
     
+    def toByteOption: Option[Byte] = Try(str.toByte).toOption
+    
     def toBooleanOption: Option[Boolean] = Try(str.toBoolean).toOption match {
       case None => str.toIntOption match {
         case Some(0) => Some(false)
