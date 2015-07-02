@@ -1,8 +1,10 @@
 name := "grandata-commons"
-
-version := "1.0"
+version := "1.3"
+organization := "com.grandata"
 
 scalaVersion := "2.10.4"
+
+crossScalaVersions := Seq("2.10.4", "2.11.7")
 
 // Read here for optional jars and dependencies
 libraryDependencies ++= Seq(
@@ -19,3 +21,8 @@ resolvers ++= Seq(
   "jsi.sourceforge.net" at "http://sourceforge.net/projects/jsi/files/m2_repo")
 
 scalacOptions in Test ++= Seq("-Yrangepos")
+
+
+
+credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
+publishTo := Some("Grandata Releases" at "https://nexus.grandata.com/content/repositories/releases")
