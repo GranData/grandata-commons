@@ -78,6 +78,8 @@ class StringsSpecs extends Specification {
       val days = Some(Duration(new DateTime(2015, 1, 10, 0, 0).getMillis, "millis").toDays)
       "10/01/2015".toDaysFromEpochOption("dd/MM/yyyy") must beEqualTo(days)
       "10/01/15".toDaysFromEpochOption("dd/MM/yy") must beEqualTo(days)
+      "2015-01-10T10:23:15-05:00".toDaysFromEpochOption("yyyy-MM-dd'T'HH:mm:ssZ") must beEqualTo(days)
+      "2015-01-09T20:23:15-05:00".toDaysFromEpochOption("yyyy-MM-dd'T'HH:mm:ssZ") must beEqualTo(days)
       "ABC".toDaysFromEpochOption("dd/MM/yyyy") must beEqualTo(None)
       "1345".toDaysFromEpochOption("dd/MM/yyyy") must beEqualTo(None)
     }
