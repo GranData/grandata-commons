@@ -112,7 +112,7 @@ class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
  */
 class GeoPoint(val lat: Double, val long: Double) extends Serializable{
 
-  def canEqual(other: Any): Boolean = other.isInstanceOf[GeoPoint]
+  private def canEqual(other: Any): Boolean = other.isInstanceOf[GeoPoint]
 
   override def equals(other: Any): Boolean = other match {
     case that: GeoPoint =>
