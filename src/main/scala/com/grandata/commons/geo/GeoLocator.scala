@@ -129,6 +129,11 @@ class GeoPoint(val lat: Double, val long: Double) extends Serializable{
     val state = Seq(lat, long)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
+
+
+  override def toString = s"($lat, $long)"
+
+  def toTuple = (this.lat, this.long)
 }
 
 object GeoPoint {
