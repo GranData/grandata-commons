@@ -43,9 +43,6 @@ class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
 
   @transient private var featuresInfo: List[(RTree, Array[Feature])] = _
 
-  /** builds the trees when GeoLocator is instantiated */
-  generateTrees
-
   /** tries to locate the given point into several polygons lists
     *
     * @param point the point to be located
