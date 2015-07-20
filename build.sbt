@@ -1,5 +1,5 @@
 name := "grandata-commons"
-version := "1.3"
+version := "1.3.2"
 organization := "com.grandata"
 
 scalaVersion := "2.10.4"
