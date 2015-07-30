@@ -1,8 +1,8 @@
 name := "grandata-commons"
-version := "1.4.1"
+version := "1.5.0-SNAPSHOT"
 organization := "com.grandata"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.11.7"
 
 crossScalaVersions := Seq("2.10.4", "2.11.7")
 
@@ -25,4 +25,10 @@ scalacOptions in Test ++= Seq("-Yrangepos")
 
 
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
-publishTo := Some("Grandata Releases" at "https://nexus.grandata.com/content/repositories/releases")
+publishTo := {
+  val url = "https://nexus.grandata.com/content/repositories"
+  if (version.value.trim.endsWith("SNAPSHOT"))
+    Some("Grandata Snapshots" at url + "/snapshots")
+  else
+    Some("Grandata Releases" at url + "/releases")
+}
