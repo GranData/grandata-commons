@@ -52,7 +52,11 @@ trait GlobImpl {
                 }
               ).getOrElse(Iterator.empty)
           case None =>
-            Iterator(newBase.toString)
+            if (Files.exists(newBase)) {
+              Iterator(newBase.toString)
+            } else {
+              Iterator.empty
+            }
         }
 
       }
