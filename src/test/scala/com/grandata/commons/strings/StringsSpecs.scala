@@ -43,6 +43,12 @@ class StringsSpecs extends Specification {
       "134,5".toFloatOption must beEqualTo(None)
     }
 
+    "Convert a String containing comma decimal separator to Float Option" in {
+      "134,5".toFloatOption(',') must beEqualTo(Some(134.5F))
+      "134.5".toFloatOption(',') must beNone
+    }
+
+
     "Convert a String to Boolean Option" in {
       "true".toBooleanOption must beEqualTo(Some(true))
       "false".toBooleanOption must beEqualTo(Some(false))
