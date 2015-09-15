@@ -5,6 +5,7 @@ import org.specs2.specification.BeforeAll
 import org.joda.time.DateTime
 import scala.concurrent.duration.Duration
 import java.util.GregorianCalendar
+import java.util.Locale
 
 /**
  * Created by gustavo on 16/04/15.
@@ -42,6 +43,38 @@ class StringsSpecs extends Specification {
       "ABC".toFloatOption must beEqualTo(None)
       "134,5".toFloatOption must beEqualTo(None)
     }
+    
+    "Convert a String in scientific notation to Float Option" in {
+      "10.567E2".toFloatOption must beEqualTo(Some(1056.7F))
+      "10.567E+2".toFloatOption must beEqualTo(Some(1056.7F))
+      "10.567E002".toFloatOption must beEqualTo(Some(1056.7F))
+      "10.567E+002".toFloatOption must beEqualTo(Some(1056.7F))
+      
+      "10.567E-2".toFloatOption must beEqualTo(Some(0.10567F))
+      "10.567E-002".toFloatOption must beEqualTo(Some(0.10567F))
+      
+      "10,567E-002".toFloatOption must beEqualTo(None)
+    }
+
+    "Convert a String with comma as decimal separator to Float Option" in {
+      "134,5".toFloatOption(Locale.GERMAN) must beEqualTo(Some(134.5F))
+      "134,5bla".toFloatOption(Locale.GERMAN) must beNone
+      "134.5".toFloatOption(Locale.GERMAN) must beEqualTo(Some(1345F))
+    }
+    
+    "Convert a String with comma as decimal separator and scientific notation to Float Option" in {
+      "10,567E2".toFloatOption(Locale.GERMAN) must beEqualTo(Some(1056.7F))
+      "10,567E+2".toFloatOption(Locale.GERMAN) must beEqualTo(Some(1056.7F))
+      "10,567E002".toFloatOption(Locale.GERMAN) must beEqualTo(Some(1056.7F))
+      "10,567E+002".toFloatOption(Locale.GERMAN) must beEqualTo(Some(1056.7F))
+      
+      "10,567E-2".toFloatOption(Locale.GERMAN) must beEqualTo(Some(0.10567F))
+      "10,567E-002".toFloatOption(Locale.GERMAN) must beEqualTo(Some(0.10567F))
+      
+      "10.567E-002".toFloatOption(Locale.GERMAN) must beEqualTo(Some(105.67F))
+      "10,567E-002bla".toFloatOption(Locale.GERMAN) must beEqualTo(None)
+    }
+
 
     "Convert a String to Boolean Option" in {
       "true".toBooleanOption must beEqualTo(Some(true))
