@@ -40,6 +40,7 @@ class StringsSpecs extends Specification {
     "Convert a String to Float Option" in {
       "134.5".toFloatOption must beEqualTo(Some(134.5F))
       "1345".toFloatOption must beEqualTo(Some(1345.0F))
+      ".1345".toFloatOption must beEqualTo(Some(0.1345F))
       "ABC".toFloatOption must beEqualTo(None)
       "134,5".toFloatOption must beEqualTo(None)
     }
@@ -53,11 +54,14 @@ class StringsSpecs extends Specification {
       "10.567E-2".toFloatOption must beEqualTo(Some(0.10567F))
       "10.567E-002".toFloatOption must beEqualTo(Some(0.10567F))
       
+      ".567E2".toFloatOption must beEqualTo(Some(56.7F))
+      
       "10,567E-002".toFloatOption must beEqualTo(None)
     }
 
     "Convert a String with comma as decimal separator to Float Option" in {
       "134,5".toFloatOption(Locale.GERMAN) must beEqualTo(Some(134.5F))
+      ",1345".toFloatOption(Locale.GERMAN) must beEqualTo(Some(0.1345F))
       "134,5bla".toFloatOption(Locale.GERMAN) must beNone
       "134.5".toFloatOption(Locale.GERMAN) must beEqualTo(Some(1345F))
     }
@@ -70,6 +74,8 @@ class StringsSpecs extends Specification {
       
       "10,567E-2".toFloatOption(Locale.GERMAN) must beEqualTo(Some(0.10567F))
       "10,567E-002".toFloatOption(Locale.GERMAN) must beEqualTo(Some(0.10567F))
+      
+      ",567E2".toFloatOption(Locale.GERMAN) must beEqualTo(Some(56.7F))
       
       "10.567E-002".toFloatOption(Locale.GERMAN) must beEqualTo(Some(105.67F))
       "10,567E-002bla".toFloatOption(Locale.GERMAN) must beEqualTo(None)
