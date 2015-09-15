@@ -6,11 +6,11 @@ package com.grandata.commons
 
 import java.text.SimpleDateFormat
 import java.util.Date
-
 import org.joda.time.format.DateTimeFormat
-
 import scala.concurrent.duration.Duration
 import scala.util.Try
+import java.util.Locale
+import java.text._
 
 package object strings {
 
@@ -23,11 +23,11 @@ package object strings {
 
     def toFloatOption: Option[Float] = Try(str.toFloat).toOption
 
-    def toFloatOption(decimalSeparator: Char): Option[Float] = {
-      if (str.contains(decimalSeparator)) {
-        Try(str.replace(decimalSeparator, '.').toFloat).toOption
-      }
-      else None
+    def toFloatOption(locale: Locale): Option[Float] = {
+      val pos = new ParsePosition(0)
+      val txt = str.replaceFirst("E\\+", "E")
+      val number = NumberFormat.getInstance(locale).parse(txt, pos)
+      if(pos.getIndex() == txt.length) Some(number.floatValue) else None
     }
 
     def toByteOption: Option[Byte] = Try(str.toByte).toOption
