@@ -80,6 +80,11 @@ class StringsSpecs extends Specification {
       "10.567E-002".toFloatOption(Locale.GERMAN) must beEqualTo(Some(105.67F))
       "10,567E-002bla".toFloatOption(Locale.GERMAN) must beEqualTo(None)
     }
+    
+    "Convert an empty String to a Float Option" in {
+      "".toFloatOption must beEqualTo(None)
+      "".toFloatOption(Locale.GERMAN) must beEqualTo(None)
+    }
 
 
     "Convert a String to Boolean Option" in {

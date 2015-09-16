@@ -24,10 +24,14 @@ package object strings {
     def toFloatOption: Option[Float] = Try(str.toFloat).toOption
 
     def toFloatOption(locale: Locale): Option[Float] = {
+      if(str.isEmpty) {
+        None
+      } else {
       val pos = new ParsePosition(0)
       val txt = str.replaceFirst("E\\+", "E")
       val number = NumberFormat.getInstance(locale).parse(txt, pos)
-      if(pos.getIndex() == txt.length) Some(number.floatValue) else None
+      if(pos.getIndex() == txt.length) Some(number.floatValue) else None  
+      }
     }
 
     def toByteOption: Option[Byte] = Try(str.toByte).toOption
