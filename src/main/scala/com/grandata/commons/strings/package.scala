@@ -11,6 +11,8 @@ import scala.concurrent.duration.Duration
 import scala.util.Try
 import java.util.Locale
 import java.text._
+import java.time._
+import java.time.format.DateTimeFormatter
 
 package object strings {
 
@@ -60,7 +62,16 @@ package object strings {
     } catch {
       case e: Throwable => None
     }
+    
+    def toLocalDateOption(format: String): Option[LocalDate] = 
+      toLocalDateOption(DateTimeFormatter.ofPattern(format))
+    def toLocalDateOption(formatter: DateTimeFormatter): Option[LocalDate] = 
+      Try(LocalDate.parse(str, formatter)).toOption
+  
+    def toLocalDateTimeOption(format: String): Option[LocalDateTime] = 
+      toLocalDateTimeOption(DateTimeFormatter.ofPattern(format))
+    def toLocalDateTimeOption(formatter: DateTimeFormatter): Option[LocalDateTime] = 
+      Try(LocalDateTime.parse(str, formatter)).toOption
 
   }
-
 }

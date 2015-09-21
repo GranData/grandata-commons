@@ -6,6 +6,8 @@ import org.joda.time.DateTime
 import scala.concurrent.duration.Duration
 import java.util.GregorianCalendar
 import java.util.Locale
+import java.time._
+import java.time.format.DateTimeFormatter
 
 /**
  * Created by gustavo on 16/04/15.
@@ -131,6 +133,18 @@ class StringsSpecs extends Specification {
     "Split line with custom char" in {
       "1,,,34,,,".splitFields(',') must beEqualTo(Vector("1", "", "", "34", "", "", ""))
       "1|||34|||".splitFields('|') must beEqualTo(Vector("1", "", "", "34", "", "", ""))
+    }
+    
+    "Convert a String to a LocalDate" in {
+      "01/12/2015".toLocalDateOption("dd/MM/yyyy") === Some(LocalDate.of(2015, Month.DECEMBER, 1))
+      "01/12/2015".toLocalDateOption(DateTimeFormatter.ofPattern("dd/MM/yyyy")) === Some(LocalDate.of(2015, Month.DECEMBER, 1))
+      "01/12/2015".toLocalDateOption("dd-MM-yyyy") must beNone
+    }
+    
+    "Convert a String to a LocalDateTime" in {
+      "01/12/2015 10:09".toLocalDateTimeOption("dd/MM/yyyy HH:mm") === Some(LocalDateTime.of(2015, Month.DECEMBER, 1, 10, 9))
+      "01/12/2015 10:09".toLocalDateTimeOption(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) === Some(LocalDateTime.of(2015, Month.DECEMBER, 1, 10, 9))
+      "01/12/2015".toLocalDateTimeOption("dd/MM/yyyy HH:mm") must beNone
     }
   }
 }
