@@ -6,6 +6,7 @@ import java.nio.file.Files
 import org.apache.commons.io.{ FileUtils => ApacheFileUtils }
 import java.util.zip.GZIPOutputStream
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 class FileUtilsSpec extends Specification {
   
@@ -111,7 +112,7 @@ class FileUtilsSpec extends Specification {
   
   def generateZipFile(p: Path, c: String) {
     val gzip = new GZIPOutputStream(Files.newOutputStream(p))
-    gzip.write(c.getBytes)
+    gzip.write(c.getBytes(StandardCharsets.UTF_8))
     gzip.finish()
     gzip.close()
   }
