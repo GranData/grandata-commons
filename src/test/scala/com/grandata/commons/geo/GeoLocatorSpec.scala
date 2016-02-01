@@ -7,13 +7,12 @@ import java.io.File
 
 class GeoLocatorSpec extends Specification with BeforeAfterAll {
   
-  var locator: GeoLocator = _
   var sFile: File = _
   var cFile: File = _
   
   "GeoLocator" should {
     "return the geo located points" in {
-      val result = locator.locate(GeoPoint(20,-101))
+      val result = new GeoLocator(List(sFile.getAbsolutePath, cFile.getAbsolutePath)).generateTrees.locate(GeoPoint(20,-101))
       result must be size(2)
       result(0) must beSome
       result(0).get.get("id") === 4
@@ -22,7 +21,7 @@ class GeoLocatorSpec extends Specification with BeforeAfterAll {
     }
   
     "return none for the points not located" in {
-      val result = locator.locate(GeoPoint(15.74,103.5))
+      val result = new GeoLocator(List(sFile.getAbsolutePath, cFile.getAbsolutePath)).generateTrees.locate(GeoPoint(15.74,103.5))
       result must be size(2)
       result(0) must beSome
       result(0).get.get("id") === 5
@@ -38,11 +37,10 @@ class GeoLocatorSpec extends Specification with BeforeAfterAll {
   override def beforeAll() {
     sFile = File.createTempFile("states", ".geojson")
     cFile = File.createTempFile("cities", ".geojson")
-    FileUtils.printToFile(sFile, FileUtils.resourceContent("/states.geojson"))
-    FileUtils.printToFile(cFile, FileUtils.resourceContent("/cities.geojson"))
-    
-    locator = new GeoLocator(List(sFile.getAbsolutePath, cFile.getAbsolutePath))
-    locator.generateTrees
+    FileUtils.printToFile(sFile, statesContent)
+    FileUtils.printToFile(cFile, citiesContent)
   }
-
+  
+  private def statesContent = FileUtils.resourceContent("/states.geojson")
+  private def citiesContent = FileUtils.resourceContent("/cities.geojson")
 }
