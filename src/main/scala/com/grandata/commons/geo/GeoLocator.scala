@@ -14,7 +14,7 @@ import io.jeo.vector.Feature
 import scala.collection.JavaConversions._
 
 /** Provides geo-location functionality for several polygon lists. Each polygon list 
-  * is proved in geojson format. It creates an spatial index for each geojson provided
+  * is provided in geojson format. It creates an spatial index for each geojson provided
   *
   * @example {{{
   *           //create a GeoLocator instance for a state and a city polygon list
@@ -84,10 +84,10 @@ class GeoLocator(geoJsonContent: Seq[String]) extends Serializable {
    * generates an R-Tree for each geojson file provided to this GeoLocator
    */
   def generateTrees = {
-    val featuresList = geoJsonContent.toList.map { content =>
+    val featuresList = geoJsonContent.map { content =>
       val reader = new GeoJSONReader
       reader.features(content).toList.toArray
-    }
+    }.toList
     val featuresTrees = featuresList.map(generateTree)
     featuresInfo = featuresTrees.zip(featuresList)
     this
