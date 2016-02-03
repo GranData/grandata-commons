@@ -4,7 +4,6 @@
 package com.grandata.commons.geo
 
 import java.io.{IOException, ObjectInputStream}
-
 import com.grandata.commons.files.FileUtils._
 import com.infomatiq.jsi.Rectangle
 import com.infomatiq.jsi.rtree.RTree
@@ -12,12 +11,10 @@ import gnu.trove.TIntProcedure
 import io.jeo.geojson.GeoJSONReader
 import io.jeo.geom.Geom
 import io.jeo.vector.Feature
-
 import scala.collection.JavaConversions._
 
 /** Provides geo-location functionality for several polygon lists. Each polygon list 
-  * is loaded from a geojson file. It creates an spatial index for each geojson file with all the polygons
-  * stored in that file
+  * is provided in geojson format. It creates an spatial index for each geojson provided
   *
   * @example {{{
   *           //create a GeoLocator instance for a state and a city polygon list
@@ -34,12 +31,17 @@ import scala.collection.JavaConversions._
   *           }
   *          }}}
   *
-  * @constructor creates a GeoLocator instance using a list of geojson files
+  * @constructor creates a GeoLocator instance using a list of polygons in geojson format
   *
   * @see [[http://geojson.org/]] for more information on geojson format
   * @author Esteban Donato
   */
-class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
+class GeoLocator(geoJsonContent: Seq[String]) extends Serializable {
+  
+  /**
+   * creates a GeoLocator instance using a list of geojson files
+   */
+  def this(geoJsonPaths: List[String]) = this(geoJsonPaths.map(fileContent).toSeq)
 
   @transient private var featuresInfo: List[(RTree, Array[Feature])] = _
 
@@ -82,13 +84,13 @@ class GeoLocator(geoJsonPaths: List[String]) extends Serializable {
    * generates an R-Tree for each geojson file provided to this GeoLocator
    */
   def generateTrees = {
-    val jsonFiles = geoJsonPaths
-    val featuresList = jsonFiles.map { jsonPath =>
+    val featuresList = geoJsonContent.map { content =>
       val reader = new GeoJSONReader
-      reader.features(fileContent(jsonPath)).toList.toArray
-    }
+      reader.features(content).toList.toArray
+    }.toList
     val featuresTrees = featuresList.map(generateTree)
     featuresInfo = featuresTrees.zip(featuresList)
+    this
   }
 
   private def generateTree(features: Array[Feature]): RTree = {
