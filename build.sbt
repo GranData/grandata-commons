@@ -18,7 +18,9 @@ libraryDependencies ++= Seq(
 
 resolvers ++= Seq(
   "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
-  "jsi.sourceforge.net" at "http://sourceforge.net/projects/jsi/files/m2_repo")
+//  "jsi.sourceforge.net" at "http://sourceforge.net/projects/jsi/files/m2_repo"
+  "jsi.sourceforge.net" at "http://ufpr.dl.sourceforge.net/project/jsi/m2_repo"
+)
 
 scalacOptions in Test ++= Seq("-Yrangepos")
 
