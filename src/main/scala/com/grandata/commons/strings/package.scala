@@ -4,15 +4,10 @@ package com.grandata.commons
  * Created by gustavo on 16/04/15.
  */
 
-import java.text.SimpleDateFormat
-import java.util.Date
-import org.joda.time.format.DateTimeFormat
-import scala.concurrent.duration.Duration
-import scala.util.Try
-import java.util.Locale
 import java.text._
-import java.time._
-import java.time.format.DateTimeFormatter
+import java.util.Locale
+
+import scala.util.Try
 
 package object strings {
 
@@ -53,25 +48,5 @@ package object strings {
       case Some(s: String) => if (s.nonEmpty) Some(s) else None
       case _ => None
     }
-
-    def toDate(format: String): Date = new SimpleDateFormat(format).parse(str)
-
-    def toDaysFromEpochOption(format: String): Option[Long] = try {
-      val date = DateTimeFormat.forPattern(format).parseDateTime(str)
-      Some(Duration(date.getMillis, "millis").toDays)
-    } catch {
-      case e: Throwable => None
-    }
-    
-    def toLocalDateOption(format: String): Option[LocalDate] = 
-      toLocalDateOption(DateTimeFormatter.ofPattern(format))
-    def toLocalDateOption(formatter: DateTimeFormatter): Option[LocalDate] = 
-      Try(LocalDate.parse(str, formatter)).toOption
-  
-    def toLocalDateTimeOption(format: String): Option[LocalDateTime] = 
-      toLocalDateTimeOption(DateTimeFormatter.ofPattern(format))
-    def toLocalDateTimeOption(formatter: DateTimeFormatter): Option[LocalDateTime] = 
-      Try(LocalDateTime.parse(str, formatter)).toOption
-
   }
 }
