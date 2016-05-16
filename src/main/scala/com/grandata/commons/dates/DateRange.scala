@@ -13,6 +13,7 @@ object DateRange {
 class DateRange(val start: LocalDate, val end: LocalDate) {
   def dayIterator = DateUtils.dayIterator(start, end)
   def monthIterator = DateUtils.monthIterator(start, end)
+  def monthsCount = monthIterator.toList.size
   
   override def hashCode = 41 * (41 + start.hashCode) + end.hashCode
   
