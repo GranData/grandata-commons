@@ -90,8 +90,9 @@ class GeoLocator(geoJsonContent: Seq[String], fixGeometries : Boolean = true) ex
     featuresInfo = featuresTrees.zip(featuresList)
     this
   }
-  
-  private def fixGeom(features: Array[Feature]) = features.map(f => if(f.geometry().isValid()) f else f.put(f.geometry().buffer(0.0)))
+
+  private def fixGeom(features: Array[Feature]) = 
+    if(fixGeometries) features.map(f => if(f.geometry().isValid()) f else f.put(f.geometry().buffer(0.0))) else features
 
   private def generateTree(features: Array[Feature]): RTree = {
     val tree = new RTree
