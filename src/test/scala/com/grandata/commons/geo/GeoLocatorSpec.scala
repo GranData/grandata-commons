@@ -1,8 +1,8 @@
 package com.grandata.commons.geo
 
 import org.specs2.mutable.Specification
-
 import com.grandata.commons.files.FileUtils
+import scala.util.Try
 
 class GeoLocatorSpec extends Specification {
   
@@ -32,6 +32,10 @@ class GeoLocatorSpec extends Specification {
       result must be size(2)
       result(1).get.get("id") === 60
 
+    }
+    
+    "fail if geojsons are invalid and fixGeometries flag is turned off" in {
+      Try(new GeoLocator(Seq(statesContent, citiesContent), false).generateTrees.locate(GeoPoint(26.1, -109.1))) must beFailedTry
     }
   }
 }
