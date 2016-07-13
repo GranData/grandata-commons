@@ -36,7 +36,7 @@ import scala.collection.JavaConversions._
   * @see [[http://geojson.org/]] for more information on geojson format
   * @author Esteban Donato
   */
-class GeoLocator(geoJsonContent: Seq[String]) extends Serializable {
+class GeoLocator(geoJsonContent: Seq[String], fixGeometries : Boolean = true) extends Serializable {
   
   /**
    * creates a GeoLocator instance using a list of geojson files
@@ -56,9 +56,7 @@ class GeoLocator(geoJsonContent: Seq[String]) extends Serializable {
       tree.intersects(toRectangle(point), new TIntProcedure() {
         def execute(i: Int) = {
           val feature = features(i)
-          //TODO geometry.buffer(0.0) is a workaround to avoid a "Self-intersection at or near point" exception.
-          //The exception is avoided now but performance got worse
-          if (feature.geometry.buffer(0.0).contains(Geom.point(point.long, point.lat))) {
+          if (feature.geometry.contains(Geom.point(point.long, point.lat))) {
             result = Some(feature)
             false
           } else {
@@ -86,12 +84,15 @@ class GeoLocator(geoJsonContent: Seq[String]) extends Serializable {
   def generateTrees = {
     val featuresList = geoJsonContent.map { content =>
       val reader = new GeoJSONReader
-      reader.features(content).toList.toArray
+      fixGeom(reader.features(content).toList.toArray)
     }.toList
     val featuresTrees = featuresList.map(generateTree)
     featuresInfo = featuresTrees.zip(featuresList)
     this
   }
+
+  private def fixGeom(features: Array[Feature]) = 
+    if(fixGeometries) features.map(f => if(f.geometry().isValid()) f else f.put(f.geometry().buffer(0.0))) else features
 
   private def generateTree(features: Array[Feature]): RTree = {
     val tree = new RTree

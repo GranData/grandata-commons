@@ -1,18 +1,17 @@
 package com.grandata.commons.geo
 
 import org.specs2.mutable.Specification
-import org.specs2.specification.BeforeAfterAll
 import com.grandata.commons.files.FileUtils
-import java.io.File
+import scala.util.Try
 
-class GeoLocatorSpec extends Specification with BeforeAfterAll {
+class GeoLocatorSpec extends Specification {
   
-  var sFile: File = _
-  var cFile: File = _
+  val statesContent = FileUtils.resourceContent("/states.geojson")
+  val citiesContent = FileUtils.resourceContent("/cities.geojson")
   
   "GeoLocator" should {
     "return the geo located points" in {
-      val result = new GeoLocator(List(sFile.getAbsolutePath, cFile.getAbsolutePath)).generateTrees.locate(GeoPoint(20,-101))
+      val result = new GeoLocator(Seq(statesContent, citiesContent)).generateTrees.locate(GeoPoint(20,-101))
       result must be size(2)
       result(0) must beSome
       result(0).get.get("id") === 4
@@ -21,26 +20,22 @@ class GeoLocatorSpec extends Specification with BeforeAfterAll {
     }
   
     "return none for the points not located" in {
-      val result = new GeoLocator(List(sFile.getAbsolutePath, cFile.getAbsolutePath)).generateTrees.locate(GeoPoint(15.74,103.5))
+      val result = new GeoLocator(Seq(statesContent, citiesContent)).generateTrees.locate(GeoPoint(15.74,103.5))
       result must be size(2)
       result(0) must beSome
       result(0).get.get("id") === 5
       result(1) must beNone
     }
+    
+    "fix invalid geometries before building the R-tree" in {
+      val result = new GeoLocator(Seq(statesContent, citiesContent)).generateTrees.locate(GeoPoint(26.1, -109.1))
+      result must be size(2)
+      result(1).get.get("id") === 60
+
+    }
+    
+    "fail if geojsons are invalid and fixGeometries flag is turned off" in {
+      Try(new GeoLocator(Seq(statesContent, citiesContent), false).generateTrees.locate(GeoPoint(26.1, -109.1))) must beFailedTry
+    }
   }
-  
-  override def afterAll() {
-    sFile.delete()
-    cFile.delete()
-  }
-  
-  override def beforeAll() {
-    sFile = File.createTempFile("states", ".geojson")
-    cFile = File.createTempFile("cities", ".geojson")
-    FileUtils.printToFile(sFile, statesContent)
-    FileUtils.printToFile(cFile, citiesContent)
-  }
-  
-  private def statesContent = FileUtils.resourceContent("/states.geojson")
-  private def citiesContent = FileUtils.resourceContent("/cities.geojson")
 }
