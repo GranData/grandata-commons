@@ -1,13 +1,13 @@
 package com.grandata.commons.strings
 
-import org.specs2.mutable.Specification
-import org.specs2.specification.BeforeAll
-import org.joda.time.DateTime
-import scala.concurrent.duration.Duration
-import java.util.GregorianCalendar
-import java.util.Locale
 import java.time._
 import java.time.format.DateTimeFormatter
+import java.util.{GregorianCalendar, Locale}
+
+import org.joda.time.DateTime
+import org.specs2.mutable.Specification
+
+import scala.concurrent.duration.Duration
 
 /**
  * Created by gustavo on 16/04/15.
