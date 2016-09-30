@@ -1,13 +1,13 @@
 package com.grandata.commons.strings
 
-import org.specs2.mutable.Specification
-import org.specs2.specification.BeforeAll
-import org.joda.time.DateTime
-import scala.concurrent.duration.Duration
-import java.util.GregorianCalendar
-import java.util.Locale
 import java.time._
 import java.time.format.DateTimeFormatter
+import java.util.{GregorianCalendar, Locale}
+
+import org.joda.time.DateTime
+import org.specs2.mutable.Specification
+
+import scala.concurrent.duration.Duration
 
 /**
  * Created by gustavo on 16/04/15.
@@ -128,6 +128,15 @@ class StringsSpecs extends Specification {
       "2015-01-09T20:23:15-05:00".toDaysFromEpochOption("yyyy-MM-dd'T'HH:mm:ssZ") must beEqualTo(days)
       "ABC".toDaysFromEpochOption("dd/MM/yyyy") must beEqualTo(None)
       "1345".toDaysFromEpochOption("dd/MM/yyyy") must beEqualTo(None)
+    }
+
+    "convert a String to year month" in {
+      val yearMonthA = Option(YearMonth.of(2016, 8))
+      val yearMonthB = Option(YearMonth.of(2016, 10))
+      "201608".toYearMonthOption("yyyyMM") must beEqualTo(yearMonthA)
+      "201610".toYearMonthOption(DateTimeFormatter.ofPattern("yyyyMM")) must beEqualTo(yearMonthB)
+      "ABC".toYearMonthOption(DateTimeFormatter.ofPattern("yyyyMM")) must beEqualTo(None)
+      "1345".toYearMonthOption(DateTimeFormatter.ofPattern("yyyyMM")) must beEqualTo(None)
     }
     
     "Split line with custom char" in {
