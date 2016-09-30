@@ -66,13 +66,6 @@ package object strings {
       case e: Throwable => None
     }
 
-    def toDaysEpochOption(formatter: DateTimeFormatter): Option[Long] =
-      Try({
-        val formattedDate = formatter.parse(str)
-        val seconds = formattedDate.getLong(ChronoField.INSTANT_SECONDS)
-        Duration(seconds, SECONDS).toDays
-      }).toOption
-
     def toYearMonthOption(format: String): Option[YearMonth] =
       toYearMonthOption(DateTimeFormatter.ofPattern(format))
     def toYearMonthOption(formatter: DateTimeFormatter): Option[YearMonth] =
