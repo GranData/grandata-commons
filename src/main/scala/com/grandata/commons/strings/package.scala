@@ -6,13 +6,16 @@ package com.grandata.commons
 
 import java.text.SimpleDateFormat
 import java.util.Date
+
 import org.joda.time.format.DateTimeFormat
-import scala.concurrent.duration.Duration
+
+import scala.concurrent.duration.{Duration, SECONDS}
 import scala.util.Try
 import java.util.Locale
 import java.text._
 import java.time._
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoField
 
 package object strings {
 
@@ -62,7 +65,14 @@ package object strings {
     } catch {
       case e: Throwable => None
     }
-    
+
+    def toDaysEpochOption(formatter: DateTimeFormatter): Option[Long] =
+      Try({
+        val formattedDate = formatter.parse(str)
+        val seconds = formattedDate.getLong(ChronoField.INSTANT_SECONDS)
+        Duration(seconds, SECONDS).toDays
+      }).toOption
+
     def toLocalDateOption(format: String): Option[LocalDate] = 
       toLocalDateOption(DateTimeFormatter.ofPattern(format))
     def toLocalDateOption(formatter: DateTimeFormatter): Option[LocalDate] = 
