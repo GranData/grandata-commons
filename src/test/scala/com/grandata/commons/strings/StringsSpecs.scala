@@ -129,6 +129,15 @@ class StringsSpecs extends Specification {
       "ABC".toDaysFromEpochOption("dd/MM/yyyy") must beEqualTo(None)
       "1345".toDaysFromEpochOption("dd/MM/yyyy") must beEqualTo(None)
     }
+
+    "convert a String to year month" in {
+      val yearMonthA = Option(YearMonth.of(2016, 8))
+      val yearMonthB = Option(YearMonth.of(2016, 10))
+      "201608".toYearMonthOption("yyyyMM") must beEqualTo(yearMonthA)
+      "201610".toYearMonthOption(DateTimeFormatter.ofPattern("yyyyMM")) must beEqualTo(yearMonthB)
+      "ABC".toYearMonthOption(DateTimeFormatter.ofPattern("yyyyMM")) must beEqualTo(None)
+      "1345".toYearMonthOption(DateTimeFormatter.ofPattern("yyyyMM")) must beEqualTo(None)
+    }
     
     "Split line with custom char" in {
       "1,,,34,,,".splitFields(',') must beEqualTo(Vector("1", "", "", "34", "", "", ""))
