@@ -73,6 +73,11 @@ package object strings {
         Duration(seconds, SECONDS).toDays
       }).toOption
 
+    def toYearMonthOption(format: String): Option[YearMonth] =
+      toYearMonthOption(DateTimeFormatter.ofPattern(format))
+    def toYearMonthOption(formatter: DateTimeFormatter): Option[YearMonth] =
+      Try(YearMonth.parse(str, formatter)).toOption
+
     def toLocalDateOption(format: String): Option[LocalDate] = 
       toLocalDateOption(DateTimeFormatter.ofPattern(format))
     def toLocalDateOption(formatter: DateTimeFormatter): Option[LocalDate] = 
